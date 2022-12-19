@@ -47,12 +47,8 @@ public class SparseMatrixCSR {
             }
 
             rows[i + 1] = tamano;
-            System.out.println(tamano);
 
         }
-        System.out.println(Arrays.toString(values));
-        System.out.println(Arrays.toString(columns));
-        System.out.println(Arrays.toString(rows));
     }
 
     public int getElement(int i, int j) {
@@ -71,6 +67,23 @@ public class SparseMatrixCSR {
     }
 
     public int[] getRow(int i) {
+        int maxC = columns[0];
+
+        for (int j : columns) {
+            if (j > maxC)
+                maxC = j;
+        }
+        int[] filaReturn = new int[maxC + 1];
+
+        int jini = rows[i];
+
+
+        for (int jini1 = jini; jini1 < rows[i + 1]; jini1++) {
+            int var = columns[jini1];
+            filaReturn[var] = values[jini1];
+        }
+        System.out.println(Arrays.toString(filaReturn));
+        return filaReturn;
     }
 
     public int[] getColumn(int j) throws OperationNotSupportedException {
