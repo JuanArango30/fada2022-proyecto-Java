@@ -55,6 +55,9 @@ public class SparseMatrixCSR {
             rows[i + 1] = tamano;
 
         }
+        System.out.println(Arrays.toString(values));
+        System.out.println(Arrays.toString(columns));
+        System.out.println(Arrays.toString(rows));
     }
 
     public int getElement(int i, int j) {
@@ -63,16 +66,16 @@ public class SparseMatrixCSR {
         int pos = columns[jb];
 
 
-        while (jb <rows[i+1]) {
+        while (jb < rows[i + 1]) {
 
-            if( pos ==j) {
+            if (pos == j) {
 
                 System.out.println("el pos es " + pos + "y el jb es: " + jb);
                 return values[jb];
 
             } else {
 
-                if(jb != columns.length-1) {
+                if (jb != columns.length - 1) {
 
                     jb++;
                     pos = columns[jb];
@@ -86,7 +89,6 @@ public class SparseMatrixCSR {
         }
 
         return 0;
-
 
     }
 
@@ -110,8 +112,20 @@ public class SparseMatrixCSR {
         return filaReturn;
     }
 
-    public int[] getColumn(int j) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException();
+    public int[] getColumn(int j) {
+        int[] vecC = new int[rows.length - 1];
+
+        for (int i = 0; i < rows.length - 1; i++) {
+
+            for (int k = rows[i]; k < rows[i + 1]; k++) {
+
+                if (columns[k] == j) {
+                    vecC[i] = values[k];
+                }
+            }
+        }
+        System.out.println(Arrays.toString(vecC));
+        return vecC;
     }
 
     public void setValue(int i, int j, int value) throws OperationNotSupportedException {
@@ -122,22 +136,22 @@ public class SparseMatrixCSR {
      * This method returns a representation of the Squared matrix
      * @return object that contests the squared matrix;
      */
-    public SparseMatrixCSR getSquareMatrix()  {
+    public SparseMatrixCSR getSquareMatrix() {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
 
         squaredMatrix.setRows(getRows());
         squaredMatrix.setColumns(getColumns());
 
-        int [] newValores = new int[getValues().length];
+        int[] newValores = new int[getValues().length];
 
         for (int i = 0; i < getValues().length; i++) {
 
-            newValores[i]=getValues()[i]*getValues()[i];
+            newValores[i] = getValues()[i] * getValues()[i];
         }
         squaredMatrix.setValues(newValores);
 
 
-        return  squaredMatrix;
+        return squaredMatrix;
     }
 
     /*
@@ -148,14 +162,14 @@ public class SparseMatrixCSR {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
 
 
-        int [][] nuevaMatriz = new int[matrix[0].length][matrix.length];
+        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length];
 
 
         for (int j = 0; j < matrix[0].length; j++) {
 
             for (int i = 0; i < matrix.length; i++) {
 
-                nuevaMatriz[j][i] =matrix[i][j];
+                nuevaMatriz[j][i] = matrix[i][j];
 
             }
         }
