@@ -4,6 +4,7 @@ import javax.naming.OperationNotSupportedException;
 import lombok.Getter;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 public class SparseMatrixCSC {
     private LoadFile loader = LoadFile.getInstance();
@@ -16,10 +17,38 @@ public class SparseMatrixCSC {
     private int[] values;
 
     public void createRepresentation(String inputFile) throws OperationNotSupportedException, FileNotFoundException {
-        //Load data
+        // Load data
         loader.loadFile(inputFile);
         matrix = loader.getMatrix();
-        throw new OperationNotSupportedException();
+
+        // Count elements different from zero
+        int size = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] != 0) {
+                    size++;
+                }
+            }
+        }
+
+        // Set array's sizes
+        values = new int[size];
+        rows = new int[size];
+        columns = new int[matrix[0].length + 1];
+        size = 0;
+
+        // Set array's values
+        for (int j = 0; j < matrix[0].length; j++) {    //Columns
+            for (int i = 0; i < matrix.length; i++){    //Rows
+                if (matrix[i][j] != 0){
+                    values[size] = matrix[i][j];
+                    rows[size] = i;
+                    size++;
+                }
+            }
+            columns[j+1] = size;
+        }
     }
 
     public int getElement(int i, int j) throws OperationNotSupportedException
