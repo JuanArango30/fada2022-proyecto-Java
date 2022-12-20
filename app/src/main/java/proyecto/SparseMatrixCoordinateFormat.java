@@ -271,12 +271,11 @@ public class SparseMatrixCoordinateFormat {
 
         for (int i = 0; i < getValues().length; i++) {
 
-            newValores[i]=values[i]*values[i];
+            newValores[i]=getValues()[i]*getValues()[i];
 
         }
 
         squaredMatrix.setValues(newValores);
-
 
         return squaredMatrix;
     }

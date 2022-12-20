@@ -1,6 +1,7 @@
 package proyecto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.FileNotFoundException;
@@ -8,12 +9,17 @@ import java.util.Arrays;
 
 public class SparseMatrixCSR {
     private LoadFile loader = LoadFile.getInstance();
+
+    @Setter
     private int[][] matrix;
     @Getter
+    @Setter
     private int[] rows;
     @Getter
+    @Setter
     private int[] columns;
     @Getter
+    @Setter
     private int[] values;
 
     public void createRepresentation(String inputFile) throws FileNotFoundException {
@@ -116,18 +122,84 @@ public class SparseMatrixCSR {
      * This method returns a representation of the Squared matrix
      * @return object that contests the squared matrix;
      */
-    public SparseMatrixCSR getSquareMatrix() throws OperationNotSupportedException {
+    public SparseMatrixCSR getSquareMatrix()  {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
-        throw new OperationNotSupportedException();
+
+        squaredMatrix.setRows(getRows());
+        squaredMatrix.setColumns(getColumns());
+
+        int [] newValores = new int[getValues().length];
+
+        for (int i = 0; i < getValues().length; i++) {
+
+            newValores[i]=getValues()[i]*getValues()[i];
+        }
+        squaredMatrix.setValues(newValores);
+
+
+        return  squaredMatrix;
     }
 
     /*
      * This method returns a representation of the transposed matrix
      * @return object that contests the transposed matrix;
      */
-    public SparseMatrixCSR getTransposedMatrix() throws OperationNotSupportedException {
+    public SparseMatrixCSR getTransposedMatrix() {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
-        throw new OperationNotSupportedException();
+
+
+        int [][] nuevaMatriz = new int[matrix[0].length][matrix.length];
+
+
+        for (int j = 0; j < matrix[0].length; j++) {
+
+            for (int i = 0; i < matrix.length; i++) {
+
+                nuevaMatriz[j][i] =matrix[i][j];
+
+            }
+        }
+
+        squaredMatrix.setMatrix(nuevaMatriz); //como ya se calculo la nueva matriz transpuesta
+
+        //volvemos a crear las representaciones (el mismo codigo de la creacion de representacion)
+
+        int tamano = 0;
+
+        for (int i = 0; i < nuevaMatriz.length; i++) {
+            for (int j = 0; j < nuevaMatriz[0].length; j++) {
+                if (nuevaMatriz[i][j] != 0) {
+                    tamano++;
+                }
+            }
+        }
+
+        int[] nuevasColumnas = new int[tamano];
+        int[] nuevosValores = new int[tamano];
+        int[] nuevasfilas = new int[nuevaMatriz.length + 1];
+        tamano = 0;
+
+        for (int i = 0; i < nuevaMatriz.length; i++) {
+            for (int j = 0; j < nuevaMatriz[0].length; j++) {
+
+                if (nuevaMatriz[i][j] != 0) {
+                    nuevosValores[tamano] = nuevaMatriz[i][j];
+                    nuevasColumnas[tamano] = j;
+                    tamano++;
+                }
+            }
+
+            nuevasfilas[i + 1] = tamano;
+
+        }
+
+
+        squaredMatrix.setValues(nuevosValores);
+        squaredMatrix.setRows(nuevasfilas);
+        squaredMatrix.setColumns(nuevasColumnas);
+
+
+        return squaredMatrix;
     }
 
 }
