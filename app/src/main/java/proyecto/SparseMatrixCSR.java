@@ -52,18 +52,36 @@ public class SparseMatrixCSR {
     }
 
     public int getElement(int i, int j) {
+
         int jb = rows[i];
         int pos = columns[jb];
 
-        while (pos != j) {
 
-            jb++;
-            if (jb > columns.length) {
-                pos = 0;
-                break;
+        while (jb <rows[i+1]) {
+
+            if( pos ==j) {
+
+                System.out.println("el pos es " + pos + "y el jb es: " + jb);
+                return values[jb];
+
+            } else {
+
+                if(jb != columns.length-1) {
+
+                    jb++;
+                    pos = columns[jb];
+
+                } else {
+
+                    return 0;
+                }
             }
+
         }
-        return values[pos];
+
+        return 0;
+
+
     }
 
     public int[] getRow(int i) {
