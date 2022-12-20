@@ -49,21 +49,13 @@ public class SparseMatrixCSR {
             rows[i + 1] = tamano;
 
         }
+        System.out.println(Arrays.toString(values));
+        System.out.println(Arrays.toString(columns));
+        System.out.println(Arrays.toString(rows));
     }
 
     public int getElement(int i, int j) {
-        int jb = rows[i];
-        int pos = columns[jb];
-
-        while (pos != j) {
-
-            jb++;
-            if (jb > columns.length) {
-                pos = 0;
-                break;
-            }
-        }
-        return values[pos];
+        
     }
 
     public int[] getRow(int i) {
