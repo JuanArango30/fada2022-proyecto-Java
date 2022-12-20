@@ -21,7 +21,7 @@ public class SparseMatrixCSC {
         loader.loadFile(inputFile);
         matrix = loader.getMatrix();
 
-        // Count elements different from zero
+        // Count elements different to zero
         int size = 0;
 
         for (int i = 0; i < matrix.length; i++) {
@@ -51,19 +51,51 @@ public class SparseMatrixCSC {
         }
     }
 
-    public int getElement(int i, int j) throws OperationNotSupportedException
-    {
-        throw new OperationNotSupportedException();
+    public int getElement(int i, int j) throws OperationNotSupportedException{
+        if (columns[j] != columns[j+1]) {
+            for (int row = columns[j]; row < columns[j+1]; row++){
+                if (rows[row] == i) {
+                    return values[row];
+                }
+            }
+        }
+        return 0;
     }
 
-    public int[] getRow(int i) throws OperationNotSupportedException
-    {
-        throw new OperationNotSupportedException();
+    public int[] getRow(int i) throws OperationNotSupportedException{
+        int[] row = new int[columns.length-1];
+        boolean rowExist = false;
+
+        for (int r: rows){
+            if (r == i){
+                rowExist = true;
+                break;
+            }
+        }
+        if (rowExist){
+            for (int j = 0; j < row.length; j++) {
+                if (columns[j] != columns[j+1]) {
+                    for (int r = columns[j]; r < columns[j+1]; r++){
+                        if (rows[r] == i) {
+                            row[j] = values[r];
+                        }
+                    }
+                }
+            }
+        }
+        return row;
     }
 
-    public int[] getColumn(int j) throws OperationNotSupportedException
-    {
-        throw new OperationNotSupportedException();
+    public int[] getColumn(int j) throws OperationNotSupportedException{
+        int[] column = new int[matrix.length];
+
+        // row es la posición del arreglo rows desde donde empieza la columna
+        if (columns[j] != columns[j+1]) {
+            for (int row = columns[j]; row < columns[j+1]; row++){
+                column[rows[row]] = values[row];
+            }
+        }
+        return column;
     }
 
     public void setValue(int i, int j, int value) throws OperationNotSupportedException
