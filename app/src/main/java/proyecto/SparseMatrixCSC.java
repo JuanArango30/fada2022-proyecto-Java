@@ -200,33 +200,37 @@ public class SparseMatrixCSC {
      */
     public SparseMatrixCSC getTransposedMatrix() throws OperationNotSupportedException{
         SparseMatrixCSC squaredMatrix = new SparseMatrixCSC();
-        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length];
+
+        int matrix2[][] = new int[matrix[0].length][matrix.length];
 
         for (int j = 0; j < matrix[0].length; j++) {
+
             for (int i = 0; i < matrix.length; i++) {
-                nuevaMatriz[j][i] = matrix[i][j];
+
+                matrix2[j][i] = matrix[i][j];
+
             }
         }
-        squaredMatrix.setMatrix(nuevaMatriz); //como ya se calculo la nueva matriz transpuesta
+        squaredMatrix.setMatrix(matrix2); //como ya se calculo la nueva matriz transpuesta
         //volvemos a crear las representaciones (el mismo codigo de la creacion de representacion)
         int tamano = 0;
 
-        for (int i = 0; i < nuevaMatriz.length; i++) {
-            for (int j = 0; j < nuevaMatriz[0].length; j++) {
-                if (nuevaMatriz[i][j] != 0) {
+        for (int i = 0; i < matrix2.length; i++) {
+            for (int j = 0; j < matrix2[0].length; j++) {
+                if (matrix2[i][j] != 0) {
                     tamano++;
                 }
             }
         }
         int[] nuevasFilas = new int[tamano];
         int[] nuevosValores = new int[tamano];
-        int[] nuevasColumnas = new int[nuevaMatriz[0].length + 1];
+        int[] nuevasColumnas = new int[matrix2[0].length + 1];
         tamano = 0;
 
-        for (int j = 0; j < nuevaMatriz[0].length; j++) {    //Columns
-            for (int i = 0; i < nuevaMatriz.length; i++){    //Rows
-                if (nuevaMatriz[i][j] != 0) {
-                    nuevosValores[tamano] = nuevaMatriz[i][j];
+        for (int j = 0; j < matrix2[0].length; j++) {    //Columns
+            for (int i = 0; i < matrix2.length; i++){    //Rows
+                if (matrix2[i][j] != 0) {
+                    nuevosValores[tamano] = matrix2[i][j];
                     nuevasFilas[tamano] = i;
                     tamano++;
                 }
