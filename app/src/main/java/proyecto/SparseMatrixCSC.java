@@ -103,7 +103,78 @@ public class SparseMatrixCSC {
         return column;
     }
 
-    public void setValue(int i, int j, int value) throws OperationNotSupportedException{
+    public void setValue(int i, int j, int value) {
+
+        //implementación desde vectores a otra matriz
+        int[][] matrix2;
+
+        int sizeRow = columns[0];
+
+        for (int k = 0; k < rows.length; k++) {
+            if (rows[k] > sizeRow){
+                sizeRow = rows[k];
+            }
+        }
+
+        sizeRow++;
+
+        matrix2 = new int[sizeRow][columns.length-1];
+
+        int contColum = 0;
+        int contVal=0;
+
+        for (int k = 0; k < columns.length-1; k++) {
+            for (int l = 0; l < rows.length; l++) {
+                if (columns[contColum] == l) {
+                    contColum++;
+                    for (int m = 0; m < (columns[contColum] - columns[contColum-1]); m++) {
+                        matrix2[rows[contVal]][k] = values[contVal];
+                        contVal++;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        //---------------------------------------
+        for (int k = 0; k < matrix2.length; k++) {
+            for (int l = 0; l < matrix2[0].length; l++) {
+                if(k == i && l == j){
+                    matrix2[k][l] = value;
+                }
+            }
+        }
+
+        int size = 0;
+
+        for (int k = 0; k < matrix2.length; k++) {
+            for (int l = 0; l < matrix2[0].length; l++) {
+                if (matrix2[k][l] != 0) {
+                    size++;
+                }
+            }
+        }
+
+        // Set array's sizes
+        values = new int[size];
+        rows = new int[size];
+        columns = new int[matrix[0].length + 1];
+        size = 0;
+
+        // Set array's values
+        for (int l = 0; l < matrix2[0].length; l++) {    //Columns
+            for (int k = 0; k < matrix2.length; k++){    //Rows
+                if (matrix2[k][l] != 0){
+                    values[size] = matrix2[k][l];
+                    rows[size] = k;
+                    size++;
+                }
+            }
+            columns[l+1] = size;
+        }
+
+
 
     }
 

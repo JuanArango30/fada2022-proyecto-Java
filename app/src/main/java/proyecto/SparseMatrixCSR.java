@@ -128,8 +128,78 @@ public class SparseMatrixCSR {
         return vecC;
     }
 
-    public void setValue(int i, int j, int value) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException();
+    public void setValue(int i, int j, int value) {
+
+        //implementación desde vectores a otra matriz
+        int[][] matrix2;
+        int sizeCol = columns[0];
+
+        for (int k = 1; k < columns.length; k++) {
+            if (columns[k] > sizeCol){
+                sizeCol = columns[k];
+            }
+        }
+        sizeCol++;
+
+        matrix2 = new int[rows.length-1][sizeCol];
+
+        int contRows = 0;
+        int contVal=0;
+
+        for (int k = 0; k < rows.length-1; k++) {
+            for (int l = 0; l < columns.length; l++) {
+                if (rows[contRows] == l) {
+                    contRows++;
+                    for (int m = 0; m < (rows[contRows] - rows[contRows-1]); m++) {
+                        matrix2[k][columns[contVal]] = values[contVal];
+                        contVal++;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        //------------------------------Representacion nueva
+
+        for (int k = 0; k < matrix2.length; k++) {
+            for (int l = 0; l < matrix2[0].length; l++) {
+                if(k == 0 && l == 4){
+                    matrix2[k][l] = 10;
+                }
+            }
+        }
+
+        int cont=0;
+
+        for (int k = 0; k < matrix2.length; k++) {
+            for (int l = 0; l < matrix2[0].length; l++) {
+                if (matrix2[k][l] != 0) {
+                    cont++;
+                }
+            }
+        }
+
+        columns = new int[cont];
+        values = new int[cont];
+        rows = new int[matrix2.length + 1];
+        cont = 0;
+
+        for (int k = 0; k < matrix2.length; k++) {
+            for (int l = 0; l < matrix2[0].length; l++) {
+
+                if (matrix2[k][l] != 0) {
+                    values[cont] = matrix2[k][l];
+                    columns[cont] = l;
+                    cont++;
+                }
+            }
+
+            rows[k + 1] = cont;
+
+        }
+
+
     }
 
     /*

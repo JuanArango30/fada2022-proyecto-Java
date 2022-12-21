@@ -217,46 +217,53 @@ public class SparseMatrixCoordinateFormat {
 
     public void setValue(int i, int j, int value)
     {
-        //Cambiar los atributos rows, cols, values y matrix aqui
-
-        int valorColumna =0;
-
-
-        for (int k = 0; k < rows.length; k++) {
-
-            if(rows[k] == i ) {
-
-                valorColumna = columns[k];
-
-                if(valorColumna ==j){
-
-                    values[k]=value;
-
-                } else {
-
-                    if( valorColumna < j) {
-
-                        //crear substrings
-
-                    } else{
-
-                        if(valorColumna >j ) {
-
-                            continue;
-
-                        }
-
-                    }
-
+        for (int k = 0; k < matrix.length; k++) {
+            for (int l = 0; l < matrix[0].length; l++) {
+                if(k == i && l == j){
+                    matrix[k][l] = value;
                 }
-
             }
-
-
         }
 
+        int nfilas=0;
+        int ncolumnas =0;
+        int nelemento =0; //para iniciar lo arrays al valor necesario
+        int nvalor =0;
+
+        for (int [] filas: matrix) {
+
+            for (int elemento : filas) {
+
+                if( elemento !=0){
+
+                    nelemento++;
+
+                }
+            }
+
+        }
+        //  nelemento --;
+
+        rows = new int[nelemento];
+        columns = new int[nelemento];
+        values = new int[nelemento];
 
 
+        for (int k = 0; k < matrix.length; k++) {
+            for (int l = 0; l < matrix[0].length; l++) {
+
+                if(matrix[k][l] != 0) {
+
+                    rows[nfilas] = k;
+                    columns[ncolumnas] = l;
+                    values[nvalor] = matrix[k][l];
+
+                    nfilas++;
+                    ncolumnas++;
+                    nvalor++;
+                }
+            }
+        }
 
     }
 
