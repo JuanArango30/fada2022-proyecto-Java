@@ -2,8 +2,6 @@ package proyecto;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.naming.OperationNotSupportedException;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
@@ -135,22 +133,22 @@ public class SparseMatrixCSR {
         int sizeCol = columns[0];
 
         for (int k = 1; k < columns.length; k++) {
-            if (columns[k] > sizeCol){
+            if (columns[k] > sizeCol) {
                 sizeCol = columns[k];
             }
         }
         sizeCol++;
 
-        matrix2 = new int[rows.length-1][sizeCol];
+        matrix2 = new int[rows.length - 1][sizeCol];
 
         int contRows = 0;
-        int contVal=0;
+        int contVal = 0;
 
-        for (int k = 0; k < rows.length-1; k++) {
+        for (int k = 0; k < rows.length - 1; k++) {
             for (int l = 0; l < columns.length; l++) {
                 if (rows[contRows] == l) {
                     contRows++;
-                    for (int m = 0; m < (rows[contRows] - rows[contRows-1]); m++) {
+                    for (int m = 0; m < (rows[contRows] - rows[contRows - 1]); m++) {
                         matrix2[k][columns[contVal]] = values[contVal];
                         contVal++;
                     }
@@ -164,13 +162,13 @@ public class SparseMatrixCSR {
 
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
-                if(k == 0 && l == 4){
+                if (k == 0 && l == 4) {
                     matrix2[k][l] = 10;
                 }
             }
         }
 
-        int cont=0;
+        int cont = 0;
 
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
