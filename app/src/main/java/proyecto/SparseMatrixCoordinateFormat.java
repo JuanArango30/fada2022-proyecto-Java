@@ -45,7 +45,7 @@ public class SparseMatrixCoordinateFormat {
         columns = new int[nelemento];
         values = new int[nelemento];
 
-        // Fijar los valores de los arrays, se recorre por columnas
+        // Fijar los valores de los arrays, se recorre por filas
 
         for (int i = 0; i < matrix.length; i++) {   //Filas
             for (int j = 0; j < matrix[0].length; j++) {    //Columnas
@@ -69,6 +69,8 @@ public class SparseMatrixCoordinateFormat {
         int finalValores = valores.length;
         boolean busquedaExitosa = false;
 
+        // Verificar si la fila existe
+
         for (int k = 0; k < filas.length; k++) {
             if (filas[k] == i) {
                 indexFila = k;
@@ -77,14 +79,14 @@ public class SparseMatrixCoordinateFormat {
             }
         }
         if (busquedaExitosa) {
-            if (columnas[indexFila] == j) {
+            if (columnas[indexFila] == j) { // Retornar el elemento si coinciden la fila y la columna
                 return valores[indexFila];
             } else {
-                if (indexFila != finalFila && (indexFila != finalFila - 1)) {
+                if (indexFila != finalFila && (indexFila != finalFila - 1)) {   // Recursión con el resto de los elementos
                     int[] nfilas = Arrays.copyOfRange(filas, indexFila + 1, finalFila);
                     int[] ncolumnas = Arrays.copyOfRange(columnas, indexFila + 1, finalColumna);
                     int[] nvalores = Arrays.copyOfRange(valores, indexFila + 1, finalValores);
-                    return buscarElemento(nfilas, ncolumnas, nvalores, i, j);
+                    return buscarElemento(nfilas, ncolumnas, nvalores, i, j);   // Llamado recursivo
                 }
             }
         }
@@ -96,6 +98,8 @@ public class SparseMatrixCoordinateFormat {
         System.out.println("elemento a buscar es fila: " + i);
         System.out.println("elemento a buscar es columna: " + j);
 
+        // Buscar el elemento en la fila y columna deseada con buscarElemento()
+
         int elementoF = buscarElemento(rows, columns, values, i, j);
         return elementoF;
     }
@@ -104,12 +108,16 @@ public class SparseMatrixCoordinateFormat {
         int cColumnas = 0;
         int maximoColumnas = columns[0];
 
+        // Determinar el tamaño de la fila
+
         for (int numeroColumna : columns) {
             if (numeroColumna > maximoColumnas) {
                 maximoColumnas = numeroColumna;
             }
         }
         int[] listaDevolver = new int[maximoColumnas + 1];
+
+        // Llenar listaDevolver con los valores de la fila deseada
 
         for (int j = 0; j < rows.length; j++) {
             if (rows[j] == i) {
@@ -125,12 +133,16 @@ public class SparseMatrixCoordinateFormat {
         int cFilas = 0;
         int maximoFilas = rows[0];
 
+        // Determinar el tamaño de la columna
+
         for (int numeroFila : rows) {
             if (numeroFila > maximoFilas) {
                 maximoFilas = numeroFila;
             }
         }
         int[] listaDevolver = new int[maximoFilas + 1];
+
+        // Llenar listaDevolver con los valores de la columna deseada
 
         for (int k = 0; k < columns.length; k++) {
             if (columns[k] == j) {
@@ -188,8 +200,10 @@ public class SparseMatrixCoordinateFormat {
         SparseMatrixCoordinateFormat squaredMatrix = new SparseMatrixCoordinateFormat();
         squaredMatrix.setRows(getRows());
         squaredMatrix.setColumns(getColumns());
-
         int[] newValores = new int[getValues().length];
+
+        // Elevar al cuadrado los valores de la matriz y almacenarlos en un nuevo array
+
         for (int i = 0; i < getValues().length; i++) {
             newValores[i] = getValues()[i] * getValues()[i];
         }
@@ -203,7 +217,9 @@ public class SparseMatrixCoordinateFormat {
      */
     public SparseMatrixCoordinateFormat getTransposedMatrix(){
         SparseMatrixCoordinateFormat squaredMatrix = new SparseMatrixCoordinateFormat();
-        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length];
+        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length]; // Intercambiar filas/columnas por columnas/filas
+
+        // Crear matriz transpuesta
 
         for (int j = 0; j < matrix[0].length; j++) {
             for (int i = 0; i < matrix.length; i++) {
@@ -212,13 +228,15 @@ public class SparseMatrixCoordinateFormat {
         }
         squaredMatrix.setMatrix(nuevaMatriz);
 
-        ///SE CALCULA OTRA VEZ :)
+        // Volvemos a crear las representaciones (el mismo codigo de la creacion de representacion)
+
         int nfilas = 0;
         int ncolumnas = 0;
-        int nelemento = 0; //para iniciar lo arrays al valor necesario
+        int nelemento = 0;
         int nvalor = 0;
 
-        //le damos el tamaño a cada uno de los vectores
+        // Contar elementos diferentes de cero
+
         for (int[] filas: nuevaMatriz) {
             for (int elemento : filas) {
                 if (elemento != 0) {
@@ -226,10 +244,14 @@ public class SparseMatrixCoordinateFormat {
                 }
             }
         }
-        //  nelemento --;
+
+        // Fijar los tamaños de los arrays
+
         int[] nuevasfilas = new int[nelemento];
         int[]  nuevasColumnas = new int[nelemento];
         int[] nuevosValores = new int[nelemento];
+
+        // Fijar los valores de los arrays
 
         for (int i = 0; i < nuevaMatriz.length; i++) {
             for (int j = 0; j < nuevaMatriz[0].length; j++) {
@@ -237,7 +259,6 @@ public class SparseMatrixCoordinateFormat {
                     nuevasfilas[nfilas] = i;
                     nuevasColumnas[ncolumnas] = j;
                     nuevosValores[nvalor] = nuevaMatriz[i][j];
-
                     nfilas++;
                     ncolumnas++;
                     nvalor++;
