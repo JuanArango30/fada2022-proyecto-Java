@@ -17,7 +17,6 @@ class SparseMatrixCoordinateFormatTest {
     private String file4 = "inputs/matrix4.in";
     private String file5 = "inputs/matrix5.in";
 
-
     @Test
     void createRepresentation() throws FileNotFoundException, OperationNotSupportedException {
         SparseMatrixCoordinateFormat instance = new SparseMatrixCoordinateFormat();

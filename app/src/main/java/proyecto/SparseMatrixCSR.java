@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 public class SparseMatrixCSR {
     private LoadFile loader = LoadFile.getInstance();
-
     @Setter
     private int[][] matrix;
     @Getter
@@ -24,8 +23,9 @@ public class SparseMatrixCSR {
         //Load data
         loader.loadFile(inputFile);
         matrix = loader.getMatrix();
-
         int tamano = 0;
+
+        // Contar elementos diferentes de cero
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
@@ -35,10 +35,14 @@ public class SparseMatrixCSR {
             }
         }
 
+        // Fijar los tamaños de los arrays
+
         columns = new int[tamano];
         values = new int[tamano];
         rows = new int[matrix.length + 1];
         tamano = 0;
+
+        // Fijar los valores de los arrays, se recorre por filas
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
@@ -49,9 +53,7 @@ public class SparseMatrixCSR {
                     tamano++;
                 }
             }
-
-            rows[i + 1] = tamano;
-
+            rows[i + 1] = tamano;   // Almacenar los inicios de fila
         }
         System.out.println(Arrays.toString(values));
         System.out.println(Arrays.toString(columns));
@@ -59,48 +61,37 @@ public class SparseMatrixCSR {
     }
 
     public int getElement(int i, int j) {
+        int jb = rows[i];   // Índice de columna donde comienza la fila
+        int pos = columns[jb];  // Valor de la columna en la fila i
 
-        int jb = rows[i];
-        int pos = columns[jb];
-
-
-        while (jb < rows[i + 1]) {
-
-            if (pos == j) {
-
+        while (jb < rows[i + 1]) {  // Recorrer los elementos de toda la fila
+            if (pos == j) {     // Retornar el valor si la columna coincide con j
                 System.out.println("el pos es " + pos + "y el jb es: " + jb);
                 return values[jb];
-
             } else {
-
-                if (jb != columns.length - 1) {
-
+                if (jb != columns.length - 1) {     // Seguir recorriendo la fila
                     jb++;
                     pos = columns[jb];
-
                 } else {
-
                     return 0;
                 }
             }
-
         }
-
         return 0;
-
     }
 
     public int[] getRow(int i) {
         int maxC = columns[0];
 
-        for (int j : columns) {
+        for (int j : columns) {     // Determinar el tamaño de la fila
             if (j > maxC)
                 maxC = j;
         }
-        int[] filaReturn = new int[maxC + 1];
 
+        int[] filaReturn = new int[maxC + 1];
         int jini = rows[i];
 
+        // Buscar los valores de las columnas en fila i y almacenarlos
 
         for (int jini1 = jini; jini1 < rows[i + 1]; jini1++) {
             int var = columns[jini1];
@@ -113,11 +104,11 @@ public class SparseMatrixCSR {
     public int[] getColumn(int j) {
         int[] vecC = new int[rows.length - 1];
 
+        // Recorrer la representación por filas/columnas
+
         for (int i = 0; i < rows.length - 1; i++) {
-
             for (int k = rows[i]; k < rows[i + 1]; k++) {
-
-                if (columns[k] == j) {
+                if (columns[k] == j) {  // Si la columna coincide, almacenar el valor
                     vecC[i] = values[k];
                 }
             }
@@ -127,7 +118,6 @@ public class SparseMatrixCSR {
     }
 
     public void setValue(int i, int j, int value) {
-
         //implementación desde vectores a otra matriz
         int[][] matrix2;
         int sizeCol = columns[0];
@@ -152,7 +142,6 @@ public class SparseMatrixCSR {
                         matrix2[k][columns[contVal]] = values[contVal];
                         contVal++;
                     }
-
                     break;
                 }
             }
@@ -162,8 +151,8 @@ public class SparseMatrixCSR {
 
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
-                if (k == 0 && l == 4) {
-                    matrix2[k][l] = 10;
+                if (k == i && l == j) {
+                    matrix2[k][l] = value;
                 }
             }
         }
@@ -192,12 +181,8 @@ public class SparseMatrixCSR {
                     cont++;
                 }
             }
-
             rows[k + 1] = cont;
-
         }
-
-
     }
 
     /*
@@ -206,19 +191,16 @@ public class SparseMatrixCSR {
      */
     public SparseMatrixCSR getSquareMatrix() {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
-
         squaredMatrix.setRows(getRows());
         squaredMatrix.setColumns(getColumns());
-
         int[] newValores = new int[getValues().length];
 
-        for (int i = 0; i < getValues().length; i++) {
+        // Elevar al cuadrado los valores de la matriz y almacenarlos en un nuevo array
 
+        for (int i = 0; i < getValues().length; i++) {
             newValores[i] = getValues()[i] * getValues()[i];
         }
         squaredMatrix.setValues(newValores);
-
-
         return squaredMatrix;
     }
 
@@ -228,27 +210,25 @@ public class SparseMatrixCSR {
      */
     public SparseMatrixCSR getTransposedMatrix() {
         SparseMatrixCSR squaredMatrix = new SparseMatrixCSR();
+        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length]; // Intercambiar filas/columnas por columnas/filas
 
-
-        int[][] nuevaMatriz = new int[matrix[0].length][matrix.length];
-
+        // Crear matriz transpuesta
 
         for (int j = 0; j < matrix[0].length; j++) {
-
             for (int i = 0; i < matrix.length; i++) {
-
                 nuevaMatriz[j][i] = matrix[i][j];
-
             }
         }
+        squaredMatrix.setMatrix(nuevaMatriz);
 
-        squaredMatrix.setMatrix(nuevaMatriz); //como ya se calculo la nueva matriz transpuesta
-
-        //volvemos a crear las representaciones (el mismo codigo de la creacion de representacion)
+        // Volvemos a crear las representaciones (el mismo codigo de la creacion de representacion)
 
         int tamano = 0;
 
-        for (int i = 0; i < nuevaMatriz.length; i++) {
+        // Contar elementos diferentes de cero
+
+        for (int i = 0; i < nuevaMatriz.length;
+             i++) {
             for (int j = 0; j < nuevaMatriz[0].length; j++) {
                 if (nuevaMatriz[i][j] != 0) {
                     tamano++;
@@ -256,10 +236,14 @@ public class SparseMatrixCSR {
             }
         }
 
+        // Fijar los tamaños de los arrays
+
         int[] nuevasColumnas = new int[tamano];
         int[] nuevosValores = new int[tamano];
         int[] nuevasfilas = new int[nuevaMatriz.length + 1];
         tamano = 0;
+
+        // Fijar los valores de los arrays, se recorre por filas
 
         for (int i = 0; i < nuevaMatriz.length; i++) {
             for (int j = 0; j < nuevaMatriz[0].length; j++) {
@@ -270,17 +254,11 @@ public class SparseMatrixCSR {
                     tamano++;
                 }
             }
-
-            nuevasfilas[i + 1] = tamano;
-
+            nuevasfilas[i + 1] = tamano;    // Almacenar los inicios de fila
         }
-
-
         squaredMatrix.setValues(nuevosValores);
         squaredMatrix.setRows(nuevasfilas);
         squaredMatrix.setColumns(nuevasColumnas);
-
-
         return squaredMatrix;
     }
 
