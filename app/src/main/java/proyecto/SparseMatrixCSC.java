@@ -114,7 +114,7 @@ public class SparseMatrixCSC {
     public int[] getColumn(int j) {
         int[] column = new int[matrix.length];  // Array para almacenar la columna de salida
 
-        // row es la posición del arreglo rows desde donde empieza la columna
+        // Row es la posición del arreglo rows desde donde empieza la columna
 
         if (columns[j] != columns[j + 1]) { // Verificar si la columna existe
 
@@ -128,20 +128,26 @@ public class SparseMatrixCSC {
     }
 
     public void setValue(int i, int j, int value) {
-        // Implementación desde vectores a otra matriz
-        int[][] matrix2;
+
+        //Implementación desde vectores a otra matriz
+        int[][] matrix2; //Creamos una nueva matriz
+
         int sizeRow = columns[0];
 
-        for (int k = 0; k < rows.length; k++) {
+        for (int k = 0; k < rows.length; k++) { //Buscamos el numero mayor del vector filas
             if (rows[k] > sizeRow) {
                 sizeRow = rows[k];
             }
         }
+
         sizeRow++;
-        matrix2 = new int[sizeRow][columns.length - 1];
+
+        matrix2 = new int[sizeRow][columns.length - 1]; //Le damos el tamaño a la nueva matriz
+
         int contColum = 0;
         int contVal = 0;
 
+        //Llenamos la matriz segun los vectores de la representacion
         for (int k = 0; k < columns.length - 1; k++) {
             for (int l = 0; l < rows.length; l++) {
                 if (columns[contColum] == l) {
@@ -150,10 +156,13 @@ public class SparseMatrixCSC {
                         matrix2[rows[contVal]][k] = values[contVal];
                         contVal++;
                     }
+
                     break;
                 }
             }
         }
+
+        //---------------------Ingresamos el nuevo valor------------------
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
                 if (k == i && l == j) {
@@ -161,7 +170,11 @@ public class SparseMatrixCSC {
                 }
             }
         }
+
         int size = 0;
+
+        // Contamos cuantos valores hay en la matriz nueva
+
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
                 if (matrix2[k][l] != 0) {
@@ -170,22 +183,22 @@ public class SparseMatrixCSC {
             }
         }
 
-        // Set array's sizes
+        // Ingresamos el tamaño de los arrays
         values = new int[size];
         rows = new int[size];
         columns = new int[matrix[0].length + 1];
         size = 0;
 
-        // Set array's values
-        for (int l = 0; l < matrix2[0].length; l++) {    //Columns
-            for (int k = 0; k < matrix2.length; k++) {    //Rows
+        // Ingresamos los nuevos valores de los vectores
+        for (int l = 0; l < matrix2[0].length; l++) {    //Columnas
+            for (int k = 0; k < matrix2.length; k++) {    //Filas
                 if (matrix2[k][l] != 0) {
                     values[size] = matrix2[k][l];
                     rows[size] = k;
                     size++;
                 }
             }
-            columns[l + 1] = size;
+            columns[l + 1] = size; // Almacenar los inicios de columna
         }
     }
 

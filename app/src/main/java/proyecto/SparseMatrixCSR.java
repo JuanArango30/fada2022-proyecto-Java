@@ -61,7 +61,7 @@ public class SparseMatrixCSR {
     }
 
     public int getElement(int i, int j) {
-        int jb = rows[i];   // Índice de columna donde comienza la fila
+        int jb = rows[i];   // Indice de columna donde comienza la fila
         int pos = columns[jb];  // Valor de la columna en la fila i
 
         while (jb < rows[i + 1]) {  // Recorrer los elementos de toda la fila
@@ -118,36 +118,38 @@ public class SparseMatrixCSR {
     }
 
     public void setValue(int i, int j, int value) {
+
         //implementación desde vectores a otra matriz
         int[][] matrix2;
         int sizeCol = columns[0];
 
-        for (int k = 1; k < columns.length; k++) {
+        for (int k = 1; k < columns.length; k++) { //tomamos el maximo valor del vector columnas
             if (columns[k] > sizeCol) {
                 sizeCol = columns[k];
             }
         }
         sizeCol++;
 
-        matrix2 = new int[rows.length - 1][sizeCol];
+        matrix2 = new int[rows.length - 1][sizeCol]; //Iniciamos la nueva matriz
 
         int contRows = 0;
         int contVal = 0;
 
-        for (int k = 0; k < rows.length - 1; k++) {
-            for (int l = 0; l < columns.length; l++) {
+        for (int k = 0; k < rows.length - 1; k++) { //pasamos por todas las filas
+            for (int l = 0; l < columns.length; l++) { //pasamos por todas las columnas
                 if (rows[contRows] == l) {
                     contRows++;
                     for (int m = 0; m < (rows[contRows] - rows[contRows - 1]); m++) {
                         matrix2[k][columns[contVal]] = values[contVal];
                         contVal++;
                     }
+
                     break;
                 }
             }
         }
 
-        //------------------------------Representacion nueva
+        //---------------------------Representacion nueva----------------------------
 
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
@@ -159,6 +161,8 @@ public class SparseMatrixCSR {
 
         int cont = 0;
 
+        // Contamos cuantos valores hay en la matriz nueva
+
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
                 if (matrix2[k][l] != 0) {
@@ -166,11 +170,13 @@ public class SparseMatrixCSR {
                 }
             }
         }
-
+        // Fijar los tamaños de los arrays
         columns = new int[cont];
         values = new int[cont];
         rows = new int[matrix2.length + 1];
         cont = 0;
+
+        // Fijar los valores de los arrays, se recorre por filas
 
         for (int k = 0; k < matrix2.length; k++) {
             for (int l = 0; l < matrix2[0].length; l++) {
@@ -181,7 +187,9 @@ public class SparseMatrixCSR {
                     cont++;
                 }
             }
-            rows[k + 1] = cont;
+
+            rows[k + 1] = cont; // Almacenar los inicios de fila
+
         }
     }
 
